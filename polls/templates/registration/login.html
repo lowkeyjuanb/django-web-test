@@ -1,0 +1,38 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+    {% else %}
+    <p>Please login to see this page.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td class="font-bold pb-4 uppercase text-blue-700">{{ form.username.label_tag }}</td>
+    <td class="pl-8 pb-4">{{ form.username }}</td>
+</tr>
+<tr>
+    <td class="font-bold uppercase text-blue-700">{{ form.password.label_tag }}</td>
+    <td class="pl-8">{{ form.password }}</td>
+</tr>
+</table>
+
+<input class="h-6 w-max my-2 px-8 place-self-center text-sm border-blue-600 bg-blue-600 text-white hover:bg-blue-700" type="submit" value="login">
+<input type="hidden" name="next" value="{{ next }}">
+</form>
+
+{# Assumes you set up the password_reset view in your URLconf #}
+<p><a class="hover:underline hover:text-blue-700" href="{% url 'password_reset' %}">Lost password?</a></p>
+
+{% endblock %}

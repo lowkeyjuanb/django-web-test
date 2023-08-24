@@ -1,0 +1,32 @@
+{% extends "polls/base.html" %}
+{% block title %} Resultados {% endblock title%}
+{% block content %}
+
+<h1 class="uppercase bg-blue-700 text-white px-2">{{ q.question_text }}</h1>
+<div class="grid grid-cols-2 gap-4 items-center my-2"> 
+<ul id="choice_list"
+    hx-get="/polls/{{q.id}}/results/update" 
+    hx-trigger="every 10000ms" 
+    hx-target="this" 
+    hx-swap="innerHTML">
+{% regroup votes by choice as vote_list %}
+{% for choice in vote_list %}
+    <li>{{ choice.grouper }} -- {{ choice.grouper.votes }}</li>
+    {% for vote in choice.list %}
+    {{ vote.user.username }}
+    {% endfor %}
+{% endfor %}
+</ul>
+<div class="grid grid-rows-1 gap-4 items-center"> 
+<button hx-get= "api/choice/add" 
+            hx-target="#choice_list"
+            hx-swap="beforeend"
+            class="h-6 text-sm border-blue-600 bg-blue-600 text-white hover:bg-blue-700 px-2">
+    Add new choice!
+</button>
+<a class='h-6 text-sm border-blue-600 bg-blue-600 text-white hover:bg-blue-700 px-2' 
+    href="{% url 'details' q.id %}">Votar de nuevo?</a>
+</div>
+</div>
+{% endblock content %}
+

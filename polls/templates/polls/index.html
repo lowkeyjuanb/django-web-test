@@ -1,0 +1,46 @@
+{% extends "polls/base.html" %}
+
+{% block content %}
+<div class="grid grid-cols-2 gap-4 items-center"> 
+    
+   
+    
+{% if latest_question %}
+    <h1 class="col-span-2 uppercase bg-blue-700 text-white px-2">Tus encuestas</h1>
+    <ul id="question_list" class="list-disc">
+    {% for q in latest_question %}
+    {% if q.author == user %}
+
+        <li class="italic no-underline hover:underline"><a href="{% url 'details' q.id %}">{{ q.question_text }}</a></li>
+
+                {% endif %}
+    {% endfor %}
+    </ul>
+
+{% else %}
+    <p>No hay encuestas.</p>
+{% endif %} 
+    <button hx-get= "api/question/add" 
+            hx-target="#question_list"
+            hx-swap="beforeend"
+            class='h-6 text-sm border-blue-600 bg-blue-600 text-white hover:bg-blue-700'>
+    Add new Q!
+    </button>
+    <h1 class="col-span-2 uppercase bg-blue-700 text-white px-2 mt-8">
+        Encuestas de otros usuarios
+    </h1>
+  
+{% if latest_question %}
+    <ul class="list-disc">
+    {% for q in latest_question %}
+    {% if q.author != user %}
+    <li class="italic no-underline hover:underline"><a href="{% url 'details' q.id %}">{{ q.question_text }}</a></li>
+    {% endif %}
+    {% endfor %}
+    </ul>
+
+{% else %}
+    <p>No hay encuestas.</p>
+{% endif %} 
+</div>   
+{% endblock content %}

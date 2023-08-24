@@ -1,0 +1,3 @@
+{% for choice in q.choice_set.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} voto{{ choice.votes|pluralize }}</li>
+{% endfor %}

@@ -1,0 +1,18 @@
+{% if state == 'get' %}
+<li id="current_edit">
+    <input type="text" name="choice_text" value="">
+    <button hx-post="api/choice/add"
+            hx-target="#current_edit"
+            hx-swap="outerHTML"
+            hx-include="[name='choice_text']">
+    Save
+    </button>
+</li>
+
+{% elif state == 'success' %}
+<li>
+   {% for choice in q.choice_set.all %}
+    <li>{{ choice.choice_text }} -- {{ choice.votes }} voto{{ choice.votes|pluralize }}</li>
+    {% endfor %}
+</li>
+{% endif %}
